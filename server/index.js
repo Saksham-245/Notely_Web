@@ -8,6 +8,7 @@ require("dotenv").config(); // Load environment variables at the start
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
 const { User } = require("./models/index");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 
@@ -23,10 +24,17 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.get('/api/auth/user', (req, res) => {
+// Enable rate limiting
+const apiLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 100, // limit each IP to 10 requests per windowMs
+  message: "Too many requests from this IP, please try again after an hour"
+});
+
+app.get("/api/auth/user", apiLimiter, (req, res) => {
   res.send({ user: req.user });
 });
-app.use("/api", apiRoutes);
+app.use("/api", apiLimiter, apiRoutes);
 
 passport.use(
   new BearerStrategy((token, done) => {
@@ -48,7 +56,6 @@ passport.use(
       callbackURL: "/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
-
       if (accessToken) {
         try {
           const existingUser = await User.findOne({

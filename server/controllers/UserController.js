@@ -16,6 +16,15 @@ passport.use(
         if (!user) {
           return done(null, false, { message: "Incorrect email." });
         }
+        if (user.provider === "google") {
+          return done(null, false, {
+            message:
+              "This account was created using Google. Please sign in with Google.",
+          });
+        }
+        if (!password || !user.password) {
+          return done(null, false, { message: "Missing password data." });
+        }
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
           return done(null, false, { message: "Incorrect password." });
@@ -84,8 +93,15 @@ const signUp = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   if (!(name || email || password)) {
-    return res.json({
+    return res.status(400).json({
       message: "No credentials provided",
+    });
+  }
+
+  const existingUser = await User.findOne({ where: { email } });
+  if (existingUser) {
+    return res.status(400).json({
+      message: "Account already exists",
     });
   }
 
@@ -95,7 +111,7 @@ const signUp = async (req, res) => {
     password: hashedPassword,
   });
 
-  return res.json({
+  return res.status(200).json({
     message: "Account Created",
   });
 };
@@ -110,8 +126,8 @@ function logout(req, res, next) {
       console.error("Error invalidating token:", error); // Debug: Log the error
       return res.status(500).json({ message: "Error logging out" });
     }
+    res.clearCookie("user");
     res.status(200).json({ message: "Successfully logged out" });
-    res.clearCookie('user');
   });
 }
 
