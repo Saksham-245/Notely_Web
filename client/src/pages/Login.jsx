@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from "../context/AuthContext";
@@ -11,22 +11,27 @@ function Login() {
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  const fetchUser = useCallback(async () => {
-    const { data } = await api.profile();
-    saveUser(data.user);
-    navigate('/');
-  }, [saveUser, navigate]);
 
   const googleLogin = () => {
     window.location.href = '/api/auth/google';
   };
+
   useEffect(() => {
-    const userCookie = Cookies.get('user');
-    if (userCookie) {
-      fetchUser();
-    }
-  }, [fetchUser]);
+    const handleAuthRedirect = async () => {
+      const userCookie = Cookies.get('user');
+      if (userCookie) {
+        const userData = JSON.parse(userCookie);
+        saveUser(userData);
+        navigate('/')
+      } else {
+        setLoading(false);
+      }
+    };
+
+    handleAuthRedirect();
+  }, [saveUser, navigate]);
 
   const handleMouseMove = (event) => {
     if (event.target.tagName === 'FORM') {
@@ -67,6 +72,10 @@ function Login() {
     } catch (error) {
       setError(error.response.data.message);
     }
+  }
+
+  if (loading) {
+    return <div>Loading....</div>
   }
 
   return (
