@@ -1,0 +1,16 @@
+{
+  "name": "notely",
+  "version": "1.0.0",
+  "description": "This project is a full-stack application that uses a React frontend and an Express backend. The application is a note-taking app where users can create, read, update, and delete notes.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
