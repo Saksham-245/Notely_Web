@@ -13,4 +13,7 @@ export const api = {
   logout() {
     return http.get("/logout");
   },
+  allNotes() {
+    return http.get("/notes");
+  },
 };

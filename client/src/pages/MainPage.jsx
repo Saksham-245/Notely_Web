@@ -3,6 +3,36 @@ import { api } from "../utils/api";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
+import { Link } from "react-router-dom";
+import { isArrayEmpty } from "../utils/utils";
+
+const blogs = [
+  {
+    title: "Noteworthy technology acquisitions 2021",
+    description:
+      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+  },
+  {
+    title: "Noteworthy technology acquisitions 2021",
+    description:
+      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+  },
+  {
+    title: "Noteworthy technology acquisitions 2021",
+    description:
+      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+  },
+  {
+    title: "Noteworthy technology acquisitions 2021",
+    description:
+      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+  },
+  {
+    title: "Noteworthy technology acquisitions 2021",
+    description:
+      "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+  },
+];
 
 function MainPage() {
   const navigate = useNavigate();
@@ -20,7 +50,7 @@ function MainPage() {
   return (
     <>
       <Header onLogout={onLogout} />
-      <div className="mt-4 h-full">
+      <div className="mt-4 h-full px-3 max-w-screen">
         <button
           onClick={() => navigate("/add")}
           type="button"
@@ -29,6 +59,31 @@ function MainPage() {
           Add New Note
         </button>
       </div>
+      {isArrayEmpty(blogs) && (
+        <div className="mt-64 mx-[86px] items-center flex justify-center">
+          No Notes Found
+        </div>
+      )}
+      {!isArrayEmpty(blogs) && (
+        <div className="mt-20 mx-[24px] grid grid-cols-4 gap-11">
+          {blogs.map((item) => {
+            return (
+              <Link
+                key={item.id}
+                to="#"
+                className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+              >
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {item.title}
+                </h5>
+                <p className="font-normal text-gray-700 dark:text-gray-400">
+                  {item.description}
+                </p>
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }
