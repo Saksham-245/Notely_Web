@@ -4,6 +4,7 @@ import SignUp from "./pages/SignUp"
 import { useContext } from "react"
 import { AuthContext } from "./context/AuthContext"
 import MainPage from "./pages/MainPage"
+import NewNote from "./pages/NewNote"
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -18,7 +19,10 @@ function App() {
         </>
       )}
       {user && (
-        <Route path="/" element={<MainPage />} />
+        <>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/add" element={<NewNote />} />
+        </>
       )}
       <Route path="*" element={<Navigate to={'/'} />} />
     </Routes>

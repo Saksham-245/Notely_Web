@@ -5,12 +5,12 @@ export const api = {
     return http.post("/login", payload);
   },
   signup(payload) {
-      return http.post('/signup', payload)
+    return http.post("/signup", payload);
   },
-  profile(){
-    return http.get('/auth/user')
+  profile() {
+    return http.get("/auth/user");
   },
   logout() {
-    return http.get('/logout')
-  }
+    return http.get("/logout");
+  },
 };

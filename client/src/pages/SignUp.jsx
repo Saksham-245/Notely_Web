@@ -6,15 +6,15 @@ import { api } from "../utils/api";
 
 function SignUp() {
   const containerRef = useRef(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleMouseMove = (event) => {
-    if (event.target.tagName === 'FORM') {
+    if (event.target.tagName === "FORM") {
       return;
     }
 
-    const glitter = document.createElement('div');
-    glitter.className = 'glitter';
+    const glitter = document.createElement("div");
+    glitter.className = "glitter";
     glitter.style.left = `${event.clientX}px`;
     glitter.style.top = `${event.clientY}px`;
     containerRef.current.appendChild(glitter);
@@ -23,46 +23,46 @@ function SignUp() {
     }, 1000);
   };
 
-  const validate = values => {
+  const validate = (values) => {
     const errors = {};
 
     if (!values.name) {
-      errors.name = 'Name is required'
+      errors.name = "Name is required";
     }
 
     if (!values.email) {
-      errors.email = 'Email is required'
+      errors.email = "Email is required";
     }
 
     if (!values.password) {
-      errors.password = 'Password is required'
+      errors.password = "Password is required";
     }
 
     if (!values.confirmPassword) {
-      errors.confirmPassword = 'Confirm Password is required'
+      errors.confirmPassword = "Confirm Password is required";
     }
 
     if (values.confirmPassword !== values.password) {
-      errors.confirmPassword = 'Confirm Password is not same as password'
+      errors.confirmPassword = "Confirm Password is not same as password";
     }
 
     return errors;
-  }
+  };
 
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     const data = {
       name: values.name,
       email: values.email,
-      password: values.confirmPassword
-    }
+      password: values.confirmPassword,
+    };
 
     try {
       const res = await api.signup(data);
-      console.log(res, 'res');
+      console.log(res, "res");
     } catch (e) {
       setError(e.response.data.message);
     }
-  }
+  };
 
   return (
     <div
@@ -70,8 +70,12 @@ function SignUp() {
       onMouseMove={handleMouseMove}
       className="mx-auto my-0 flex flex-col items-center justify-center h-screen gradient-background"
     >
-      <div className="mb-6 text-xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">Notely</div>
-      <div className="mb-6 text-xl leading-none tracking-tight text-gray-900 md:text-lg lg:text-base dark:text-white">A note taking application with AI built-in for your notes</div>
+      <div className="mb-6 text-xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">
+        Notely
+      </div>
+      <div className="mb-6 text-xl leading-none tracking-tight text-gray-900 md:text-lg lg:text-base dark:text-white">
+        A note taking application with AI built-in for your notes
+      </div>
       <Form
         initialValues={{}}
         onSubmit={onSubmit}
@@ -80,23 +84,55 @@ function SignUp() {
           return (
             <form className="max-w-sm mx-auto w-1/2" onSubmit={handleSubmit}>
               <div className="mb-5">
-                <Field name='name'>
-                  {({ input, meta }) => <Input {...input} meta={meta} type='text' placeholder='John Doe' label='Full Name' />}
+                <Field name="name">
+                  {({ input, meta }) => (
+                    <Input
+                      {...input}
+                      meta={meta}
+                      type="text"
+                      placeholder="John Doe"
+                      label="Full Name"
+                    />
+                  )}
                 </Field>
               </div>
               <div className="mb-5">
-                <Field name='email'>
-                  {({ input, meta }) => <Input {...input} meta={meta} type='email' placeholder='john@example.com' label='Email' />}
+                <Field name="email">
+                  {({ input, meta }) => (
+                    <Input
+                      {...input}
+                      meta={meta}
+                      type="email"
+                      placeholder="john@example.com"
+                      label="Email"
+                    />
+                  )}
                 </Field>
               </div>
               <div className="mb-5">
-                <Field name='password'>
-                  {({ input, meta }) => <Input {...input} meta={meta} type='password' placeholder='*****' label='Password' />}
+                <Field name="password">
+                  {({ input, meta }) => (
+                    <Input
+                      {...input}
+                      meta={meta}
+                      type="password"
+                      placeholder="*****"
+                      label="Password"
+                    />
+                  )}
                 </Field>
               </div>
               <div className="mb-5">
-                <Field name='confirmPassword'>
-                  {({ input, meta }) => <Input {...input} meta={meta} type='password' placeholder='*****' label='Confirm Password' />}
+                <Field name="confirmPassword">
+                  {({ input, meta }) => (
+                    <Input
+                      {...input}
+                      meta={meta}
+                      type="password"
+                      placeholder="*****"
+                      label="Confirm Password"
+                    />
+                  )}
                 </Field>
               </div>
               <button
@@ -107,17 +143,15 @@ function SignUp() {
                 Sign Up
               </button>
             </form>
-          )
+          );
         }}
       />
       <div className="text-sm mt-4 text-red-500 font-medium">{error}</div>
-      <Link to='/login'>
-        <div className="mt-4 text-blue-700">
-          Have an account? Login In Here
-        </div>
+      <Link to="/login">
+        <div className="mt-4 text-blue-700">Have an account? Login In Here</div>
       </Link>
     </div>
-  )
+  );
 }
 
-export default SignUp
+export default SignUp;
